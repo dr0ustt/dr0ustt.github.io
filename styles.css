@@ -145,3 +145,13 @@ body::after {
     display: block;
     height: 20px;
 }
+
+.clickable {
+    color: var(--prompt-color);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.clickable:hover {
+    color: #fff;
+}

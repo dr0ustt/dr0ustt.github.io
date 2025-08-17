@@ -26,7 +26,7 @@ class EncryptedMessage {
         this.messageText = '';
         this.artText = '';
         this.encryptedDisplayText = '';
-        this.promptText = '\n\nPra desvendar o mistério, é so apertar ENTER, mas só se for guardar segredo mesmo...';
+        this.promptText = '\n\nPra desvendar o mistério, é so apertar <span id="revealTrigger" class="clickable">ENTER</span>, mas só se for guardar segredo mesmo...';
         this.isDecrypting = false;
         this.intervals = [];
         
@@ -234,16 +234,31 @@ class EncryptedMessage {
     }
 
     setupDecryptionListener() {
-        const handleKeyDown = (event) => {
-            if (event.key === "Enter" && !this.isDecrypting) {
+        const handleReveal = () => {
+            if (!this.isDecrypting) {
                 this.isDecrypting = true;
                 this.menuElement.textContent = this.encryptedDisplayText;
                 this.randomizeText();
                 document.removeEventListener('keydown', handleKeyDown);
+                const triggerElement = document.getElementById('revealTrigger');
+                if (triggerElement) {
+                    triggerElement.removeEventListener('click', handleReveal);
+                }
+            }
+        };
+
+        const handleKeyDown = (event) => {
+            if (event.key === 'Enter') {
+                handleReveal();
             }
         };
 
         document.addEventListener('keydown', handleKeyDown);
+
+        const triggerElement = document.getElementById('revealTrigger');
+        if (triggerElement) {
+            triggerElement.addEventListener('click', handleReveal);
+        }
     }
 
     randomizeText() {
